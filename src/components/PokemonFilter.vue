@@ -4,7 +4,7 @@
       type="text"
       name="name"
       v-model="pokemonName"
-      placeholder="Search by Name"
+      placeholder="Search by Name -"
       id=""
     />
     <select name="type1" v-model="pokemonType1" id="">
