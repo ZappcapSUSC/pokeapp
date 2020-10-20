@@ -5,13 +5,49 @@ interface FilterOptions{
   name?: string;
   type1?: string;
   type2?: string;
+  generation?: number;
 }
 
 
-export type State = { pokeList: PokemonInfo[]; modalActive: boolean; selectedPokemon:PokemonInfo|null; fetchingSinglePokemon: boolean, fetchingPokemonList: boolean, pokeListFiltered: PokemonInfo[], filterOptions: FilterOptions, pokemonTypes: string[] };
+export type State = { 
+  pokeList: PokemonInfo[]; 
+  modalActive: boolean; 
+  selectedPokemon:PokemonInfo|null; 
+  fetchingSinglePokemon: boolean;
+  fetchingPokemonList: boolean;
+  pokeListFiltered: PokemonInfo[]; 
+  filterOptions: FilterOptions;
+  pokemonTypes: string[];
+};
 
-const state: State = { pokeList: [], modalActive: false, selectedPokemon:null, fetchingSinglePokemon: false, fetchingPokemonList: false, pokeListFiltered: [], filterOptions: {},
-pokemonTypes: ['bug', 'dark', 'dragon', 'electric', 'fairy', 'fighting','fire', 'flying', 'ghost', 'grass', 'ground', 'ice', 'normal', 'poison', 'psychic', 'rock', 'steel', 'water'] };
+const state: State = { 
+  pokeList: [], 
+  modalActive: false, 
+  selectedPokemon:null, 
+  fetchingSinglePokemon: false, 
+  fetchingPokemonList: false, 
+  pokeListFiltered: [], 
+  filterOptions: {},
+  pokemonTypes: [
+    'bug', 
+    'dark', 
+    'dragon', 
+    'electric', 
+    'fairy', 
+    'fighting',
+    'fire', 
+    'flying', 
+    'ghost', 
+    'grass', 
+    'ground', 
+    'ice', 
+    'normal', 
+    'poison', 
+    'psychic', 
+    'rock', 
+    'steel', 
+    'water'] 
+  };
 
 export default createStore({
   state,
@@ -43,10 +79,10 @@ export default createStore({
     }
   },
   actions: {
-    async fetchSinglePokemon({ commit }, payload: string){
+    async fetchSinglePokemon({ state, commit }, payload: string){
       try{
         commit('setFetchingSinglePokemon', true);
-        const request = await useSinglePokemon(payload);
+        const request = state.pokeList.find(element => element.name === payload);
         commit('setSelectedPokemon', request);
         commit('setFetchingSinglePokemon', false);
         return request;
@@ -80,12 +116,21 @@ export default createStore({
       }
     },
     filterPokemons({commit}, payload:FilterOptions): void{
-      commit('setFilteredPokemonList', state.pokeList.filter((element, index, array)=>{
+      const typeFilterBy = (type: string | undefined, filter: RegExp) => { return type && type.toLowerCase().search(filter) !== -1 };
+      commit('setFilteredPokemonList', state.pokeList.filter((element, index, array)=>
+      {
         const nameFilter = RegExp(`^${payload.name?.toLowerCase()}`);
         const type1Filter = RegExp(`^${payload.type1?.toLowerCase()}`);
         const type2Filter = RegExp(`^${payload.type2?.toLowerCase()}`);
-        return (((element.name.toLowerCase().search(nameFilter))!== -1) && (((element.type1.toLowerCase().search(type1Filter))!== -1) 
-        || (((element.type2?.toLowerCase().search(type1Filter))!== -1) && element.type2)) && (((element.type1.toLowerCase().search(type2Filter))!== -1) || (((element.type2?.toLowerCase().search(type2Filter))!== -1) && element.type2)));
+
+        const nameContainsFilter = element.name.toLowerCase().search(nameFilter)!== -1;
+        const generationIsGenerationFilter = (element.generation === payload.generation) || (payload.generation == -1);
+        
+
+        return (nameContainsFilter
+          && (typeFilterBy(element.type1, type1Filter) || typeFilterBy(element.type2, type1Filter)) 
+          && (typeFilterBy(element.type1, type2Filter)  || typeFilterBy(element.type2, type2Filter))
+          && generationIsGenerationFilter);
       }))
     }
   },

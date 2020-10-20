@@ -19,13 +19,20 @@
         type
       }}</option>
     </select>
-
+    <select name="type2" v-model.number="pokemonGeneration" id="">
+      <option :value="-1">Any</option>
+      <option
+        v-for="(gen, index) in generations"
+        :key="index"
+        :value="index + 1"
+        >{{ gen }}</option
+      >
+    </select>
     <button @click="clearFilter">CLEAR</button>
   </div>
 </template>
 
 <script lang="ts">
-//TODO Filtro por generacion de pokemon
 import { State } from "@/store";
 import { computed, defineComponent, ref, Ref, watch } from "vue";
 import { useStore } from "vuex";
@@ -35,10 +42,12 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const storeState: State = store.state;
+    const generations = ["Gen 1", "Gen 2"];
 
     const pokemonName: Ref<string> = ref("");
     const pokemonType1: Ref<string> = ref("");
     const pokemonType2: Ref<string> = ref("");
+    const pokemonGeneration: Ref<number> = ref(-1);
     const types = computed((): string[] => {
       return storeState.pokemonTypes;
     });
@@ -46,20 +55,31 @@ export default defineComponent({
       store.dispatch("filterPokemons", {
         name: pokemonName.value,
         type1: pokemonType1.value,
-        type2: pokemonType2.value
+        type2: pokemonType2.value,
+        generation: pokemonGeneration.value
       });
     };
     const clearFilter = () => {
       pokemonName.value = "";
       pokemonType1.value = "";
       pokemonType2.value = "";
+      pokemonGeneration.value = -1;
     };
 
     watch(pokemonName, filterPokemonList);
     watch(pokemonType1, filterPokemonList);
     watch(pokemonType2, filterPokemonList);
+    watch(pokemonGeneration, filterPokemonList);
 
-    return { pokemonName, pokemonType1, pokemonType2, types, clearFilter };
+    return {
+      pokemonName,
+      pokemonType1,
+      pokemonType2,
+      types,
+      clearFilter,
+      pokemonGeneration,
+      generations
+    };
   }
 });
 </script>

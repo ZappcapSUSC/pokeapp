@@ -9,6 +9,7 @@ export interface PokemonInfo{
   order: number;
   height: number;
   weight: number;
+  generation: number;
 }
 
 export interface Pokemon {
@@ -17,16 +18,16 @@ export interface Pokemon {
 }
 
 
-export const usePokemons = async function(): Promise<Pokemon[]> {
+export const usePokemons = async function(generation: number): Promise<Pokemon[]> {
   try {
-    const result = await usePokeApi("pokemon?limit=251");
-    return result.results;
+    const result = await usePokeApi(`generation/${generation}`);
+    return result.pokemon_species;
   } catch (error) {
     return Promise.reject(error);
   }
 }
 
-export const useSinglePokemon = async function(name: string): Promise<PokemonInfo> {
+export const useSinglePokemon = async function(name: string, generation: number): Promise<PokemonInfo> {
   try {
     const result = await usePokeApi(`pokemon/${name}`);
     return {
@@ -37,7 +38,8 @@ export const useSinglePokemon = async function(name: string): Promise<PokemonInf
       order: result.order,
       height: result.height,
       weight: result.weight,
-      type2: result.types[1] ? result.types[1].type.name : undefined
+      type2: result.types[1] ? result.types[1].type.name : undefined,
+      generation: generation
     };
 
   } catch (error) {
@@ -48,11 +50,24 @@ export const useSinglePokemon = async function(name: string): Promise<PokemonInf
 
 export const usePokemonCompleteList = async (): Promise<PokemonInfo[]> => {
   try {
-    const result = await usePokemons();
-    // const pokeArray: PokemonInfo[] = [];
+    let result = await usePokemons(1);
+
     const res =  result.map(async (value)=>{
-      return await useSinglePokemon(value.name);
+      console.log(value.name, 1);
+      const aux = await useSinglePokemon(value.name, 1);
+      return await aux;
     });
+
+    result = await usePokemons(2);
+
+    result.forEach((value) => {
+      //TODO Verificar por 404 en vez de nombre en especifico
+      if(value.name !== 'smeargle'){
+        const aux = useSinglePokemon(value.name, 2);
+        res.push(aux);
+      }
+    });
+
     return await Promise.all(res);
 
   } catch (error) {
