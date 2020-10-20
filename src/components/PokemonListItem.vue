@@ -1,11 +1,6 @@
 <template>
   <div class="card-item" @click="switchToggleTrue">
-    <img
-      :src="
-        `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`
-      "
-      alt=""
-    />
+    <img :src="sprite" alt="" />
     <span>{{ name }}</span>
   </div>
 </template>
@@ -18,15 +13,15 @@ export default defineComponent({
   name: "PokemonListItem",
   props: {
     name: String,
-    id: Number
+    sprite: String
   },
   setup(props) {
     const store = useStore();
     const toggleStore = computed((): boolean => store.state.modalActive);
     const switchToggleTrue = () => {
       if (toggleStore.value === false) {
-        store.commit("switchModalTrue");
         store.dispatch("fetchSinglePokemon", props.name);
+        store.commit("switchModalTrue");
       }
     };
 

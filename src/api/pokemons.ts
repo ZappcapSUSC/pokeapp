@@ -1,7 +1,7 @@
 import { usePokeApi } from "./api";
 
 export interface PokemonInfo{
-  id: number,
+  id: number;
   name: string;
   baseExperience: number;
   type1: string;
@@ -10,6 +10,7 @@ export interface PokemonInfo{
   height: number;
   weight: number;
   generation: number;
+  sprite: string;
 }
 
 export interface Pokemon {
@@ -39,7 +40,8 @@ export const useSinglePokemon = async function(name: string, generation: number)
       height: result.height,
       weight: result.weight,
       type2: result.types[1] ? result.types[1].type.name : undefined,
-      generation: generation
+      generation: generation,
+      sprite: result.sprites.front_default
     };
 
   } catch (error) {

@@ -4,9 +4,24 @@
       <p>Loading</p>
     </template>
     <template v-else-if="activePokemon">
-      <p>{{ activePokemon.name }}</p>
-      <p>{{ activePokemon.type1 }}</p>
-      <p v-if="activePokemon.type2">{{ activePokemon.type2 }}</p>
+      <div class="pokemon_modal">
+        <div class="main_info">
+          <img :src="activePokemon.sprite" alt="" />
+          <div>
+            <p>{{ activePokemon.name }}</p>
+            <p>Base expreience: {{ activePokemon.baseExperience }}</p>
+          </div>
+        </div>
+        <div class="types">
+          <p>{{ activePokemon.type1 }}</p>
+          <p v-if="activePokemon.type2">{{ activePokemon.type2 }}</p>
+        </div>
+        <div class="extra_info">
+          <p>Order: {{ activePokemon.order }}</p>
+          <p>Height: {{ activePokemon.height }}</p>
+          <p>Weight: {{ activePokemon.weight }}</p>
+        </div>
+      </div>
     </template>
     <template v-else>
       <p>No pokemon selected</p>
@@ -48,6 +63,39 @@ export default defineComponent({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="stylus">
+.pokemon_modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  div {
+    width: 100%;
+  }
+
+  .main_info {
+    display: flex;
+    justify-content: space-between;
+
+    div {
+      display: flex;
+      flex-direction: column;
+      padding-left: 10px;
+      align-items: start;
+    }
+  }
+
+  .types {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .extra_info {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+}
+
 li {
   list-style-type: none;
 }

@@ -4,7 +4,7 @@
     <Pokemon-List-Item
       v-for="pokemon in pokemonStore"
       :key="pokemon.id"
-      :id="pokemon.id"
+      :sprite="pokemon.sprite"
       :name="pokemon.name"
     ></Pokemon-List-Item>
   </div>
