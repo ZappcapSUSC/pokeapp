@@ -1,3 +1,3 @@
 module.exports = {
-  publicPath: process.env.NODE_ENV === "production" ? "/pokemon-list/" : "/",
+  publicPath: process.env.NODE_ENV === "production" ? "/pokeapp/" : "/",
 };
