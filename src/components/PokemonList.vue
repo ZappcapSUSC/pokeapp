@@ -6,12 +6,16 @@
       :key="pokemon.id"
       :sprite="pokemon.sprite"
       :name="pokemon.name"
+      :type1="pokemon.type1"
+      :type2="pokemon.type2"
+      :id="pokemon.id"
     ></Pokemon-List-Item>
+
+    <p v-if="pokemonStore.length === 0">NOTHING TO SHOW</p>
   </div>
 </template>
 
 <script lang="ts">
-//TODO checar una imagen de not found pokemon
 import { defineComponent, computed } from "vue";
 import { useStore } from "vuex";
 import PokemonListItem from "./PokemonListItem.vue";

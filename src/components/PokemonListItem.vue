@@ -1,7 +1,11 @@
 <template>
   <div class="card-item" @click="switchToggleTrue">
+    <span class="card-id"># {{ id }}</span>
     <img :src="sprite" alt="" />
-    <span>{{ name }}</span>
+    <span>{{ nameToUpperCase }}</span>
+    <p>
+      {{ type1 }}<span v-if="type2">, {{ type2 }}</span>
+    </p>
   </div>
 </template>
 
@@ -13,11 +17,21 @@ export default defineComponent({
   name: "PokemonListItem",
   props: {
     name: String,
-    sprite: String
+    sprite: String,
+    type1: String,
+    type2: String,
+    id: Number
   },
   setup(props) {
     const store = useStore();
     const toggleStore = computed((): boolean => store.state.modalActive);
+    const nameToUpperCase = computed((): string => {
+      if (props.name) {
+        return props.name.toUpperCase();
+      } else {
+        return "";
+      }
+    });
     const switchToggleTrue = () => {
       if (toggleStore.value === false) {
         store.dispatch("fetchSinglePokemon", props.name);
@@ -27,7 +41,8 @@ export default defineComponent({
 
     return {
       toggleStore,
-      switchToggleTrue
+      switchToggleTrue,
+      nameToUpperCase
     };
   }
 });
@@ -43,5 +58,19 @@ export default defineComponent({
   justify-content: center;
   padding: 20px 0px;
   margin: 0px 5px 10px;
+  min-width: 150px;
+  border-radius: 10px;
+  background-color: #41454d;
+  position: relative;
+
+  p, span {
+    color: white;
+  }
+
+  .card-id {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+  }
 }
 </style>

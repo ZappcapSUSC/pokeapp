@@ -7,27 +7,37 @@
       placeholder="Search by Name -"
       id=""
     />
-    <select name="type1" v-model="pokemonType1" id="">
-      <option value="">Any</option>
-      <option v-for="(type, index) in types" :key="index" :value="type">{{
-        type
-      }}</option>
-    </select>
-    <select name="type2" v-model="pokemonType2" id="">
-      <option value="">Any</option>
-      <option v-for="(type, index) in types" :key="index" :value="type">{{
-        type
-      }}</option>
-    </select>
-    <select name="type2" v-model.number="pokemonGeneration" id="">
-      <option :value="-1">Any</option>
-      <option
-        v-for="(gen, index) in generations"
-        :key="index"
-        :value="index + 1"
-        >{{ gen }}</option
-      >
-    </select>
+    <div>
+      <label for="type1">Type 1: </label>
+      <select name="type1" v-model="pokemonType1" id="">
+        <option value="">Any</option>
+        <option v-for="(type, index) in types" :key="index" :value="type">{{
+          type
+        }}</option>
+      </select>
+    </div>
+    <div>
+      <label for="type2">Type 2: </label>
+      <select name="type2" v-model="pokemonType2" id="">
+        <option value="">Any</option>
+        <option v-for="(type, index) in types" :key="index" :value="type">{{
+          type
+        }}</option>
+      </select>
+    </div>
+    <div>
+      <label for="generation">Generation: </label>
+      <select name="generation" v-model.number="pokemonGeneration" id="">
+        <option :value="-1">Any</option>
+        <option
+          v-for="(gen, index) in generations"
+          :key="index"
+          :value="index + 1"
+          >{{ gen }}</option
+        >
+      </select>
+    </div>
+
     <button @click="clearFilter">CLEAR</button>
   </div>
 </template>

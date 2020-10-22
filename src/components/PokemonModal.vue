@@ -8,8 +8,8 @@
         <div class="main_info">
           <img :src="activePokemon.sprite" alt="" />
           <div>
-            <p>{{ activePokemon.name }}</p>
-            <p>Base expreience: {{ activePokemon.baseExperience }}</p>
+            <span>{{ activePokemon.name }}</span>
+            <span>Base expreience: {{ activePokemon.baseExperience }}</span>
           </div>
         </div>
         <div class="types">
@@ -30,7 +30,6 @@
 </template>
 
 <script lang="ts">
-//TODO definir vista mas elaborada de pokemon individual
 import { defineComponent, computed } from "vue";
 import { useStore } from "vuex";
 import { PokemonInfo } from "@/api/pokemons";
@@ -81,12 +80,13 @@ export default defineComponent({
       flex-direction: column;
       padding-left: 10px;
       align-items: start;
+      justify-content: center;
     }
   }
 
   .types {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
   }
 
   .extra_info {
