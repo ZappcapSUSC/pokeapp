@@ -62,6 +62,7 @@ export default defineComponent({
   border-radius: 10px;
   background-color: #41454d;
   position: relative;
+  cursor: pointer;
 
   p, span {
     color: white;

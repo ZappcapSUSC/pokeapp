@@ -45,30 +45,53 @@ export const useSinglePokemon = async function(name: string, generation: number)
     };
 
   } catch (error) {
-    return Promise.reject(error);
+    return Promise.reject(error).then((value): PokemonInfo => {console.log("entra"); return value}, (valuenone): PokemonInfo => {console.log("fail"); return valuenone} );
   }
 }
 
 
 export const usePokemonCompleteList = async (): Promise<PokemonInfo[]> => {
+  //TODO cargar por batches los pokes para que no tarde tanto
   try {
-    let result = await usePokemons(1);
+    let result: Pokemon[] = await usePokemons(1);
+    // const res: PokemonInfo[] = [];
 
-    const res =  result.map(async (value)=>{
-      console.log(value.name, 1);
+    // await result.forEach( async (value) => {
+    //   const aux: PokemonInfo = await useSinglePokemon(value.name, 1)
+    //   res.push(aux);
+    // } )
+
+    const resGen1 =  await result.map(async (value)=>{
       const aux = await useSinglePokemon(value.name, 1);
-      return await aux;
+      return aux;
     });
 
     result = await usePokemons(2);
 
-    result.forEach((value) => {
-      //TODO Verificar por 404 en vez de nombre en especifico
-      if(value.name !== 'smeargle'){
-        const aux = useSinglePokemon(value.name, 2);
-        res.push(aux);
-      }
+    const resGen2 =  await result.map(async (value)=>{
+      const aux = await useSinglePokemon(value.name+"a", 2);
+      return aux;
     });
+
+
+    const res = resGen1.concat(resGen2);
+
+
+
+    // await result.forEach(async (value) => {
+    //   //TODO Verificar por 404 en vez de nombre en especifico
+    //   try{
+    //     const aux: PokemonInfo = await useSinglePokemon(value.name, 2);
+    //     res.push(aux);
+    //   } catch(error){
+    //     console.log(error);
+    //   }
+
+    // });
+
+
+    console.log(res.length);
+
 
     return await Promise.all(res);
 

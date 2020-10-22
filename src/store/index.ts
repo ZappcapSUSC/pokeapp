@@ -103,10 +103,10 @@ export default createStore({
       try{
         commit('setFetchingPokemonList', true);
         const request: PokemonInfo[] = await dispatch('fetchPokemonList');
-        console.log(request, request.length);
         request.forEach(function(value){
-          console.log(value.type2);
-          commit('addPokemon', value);
+          if(value.name)
+            commit('addPokemon', value);
+            
         });
         commit('setFetchingPokemonList', false);
 
@@ -134,6 +134,5 @@ export default createStore({
       }))
     }
   },
-  modules: {},
-  plugins: [createLogger()]
+  modules: {}
 });

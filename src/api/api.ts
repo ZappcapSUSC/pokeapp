@@ -6,9 +6,18 @@ export interface Pokemon {
 }
 
 export const useApi = async function(url: RequestInfo, options?: RequestInit) {
-  const res = await fetch(url, options);
-  const data = await res.json();
-  return data;
+  const res = await fetch(url, options).then(response => {
+    if(response.ok){
+      return response
+    } else if (response.status === 404) {
+      return Promise.reject('error 404')
+    }
+  });
+
+  if(res)
+    return await res.json();
+  else
+    return "fail"
 };
 
 export const usePokeApi = async function(
