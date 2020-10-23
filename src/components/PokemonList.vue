@@ -29,9 +29,9 @@ export default defineComponent({
     PokemonFilter
   },
   setup() {
+    //TODO cargar por batches los pokes para que no tarde tanto
     const store = useStore();
     const storeState: State = store.state;
-
     const pokemonStore = computed(() =>
       storeState.pokeListFiltered.sort((a, b) => a.id - b.id)
     );

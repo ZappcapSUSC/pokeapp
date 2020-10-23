@@ -1,4 +1,5 @@
 import { usePokeApi } from "./api";
+import { useStore } from "vuex";
 
 export interface PokemonInfo{
   id: number;
@@ -28,7 +29,7 @@ export const usePokemons = async function(generation: number): Promise<Pokemon[]
   }
 }
 
-export const useSinglePokemon = async function(name: string, generation: number): Promise<PokemonInfo> {
+export const useSinglePokemon = async function(name: string, generation: number): Promise<PokemonInfo | null> {
   try {
     const result = await usePokeApi(`pokemon/${name}`);
     return {
@@ -45,39 +46,36 @@ export const useSinglePokemon = async function(name: string, generation: number)
     };
 
   } catch (error) {
-    return Promise.reject(error).then((value): PokemonInfo => {console.log("entra"); return value}, (valuenone): PokemonInfo => {console.log("fail"); return valuenone} );
+    return Promise.reject(error).then((value): PokemonInfo => {console.log("entra"); return value}, (valuenone): null => {console.log("fail"); return null} );
   }
 }
 
 
-export const usePokemonCompleteList = async (): Promise<PokemonInfo[]> => {
-  //TODO cargar por batches los pokes para que no tarde tanto
-  try {
-    let result: Pokemon[] = await usePokemons(1);
+// export const usePokemonCompleteList = async () => {
+//     //TODO cargar por batches los pokes para que no tarde tanto
+//     let result: Pokemon[] = await usePokemons(1);
+//     const store = useStore();
 
-    const resGen1 =  await result.map(async (value)=>{
-      const aux = await useSinglePokemon(value.name, 1);
-      return aux;
-    });
+//     let count = 0;
+//     result.forEach(async (value) => {
+//       const aux: PokemonInfo | null = await useSinglePokemon(value.name, 1);
+//       if(aux){
+//         store.commit('addPokemon', value);
+//         count++;
+//         if(count===Math.ceil(result.length/10))
+//         store.commit('setFetchingPokemonList', false);
+//       }
+//     });
 
-    result = await usePokemons(2);
+//     result = await usePokemons(2);
 
-    const resGen2 =  await result.map(async (value)=>{
-      //TODO Verificar por 404 en vez de nombre en especifico
-      const aux = await useSinglePokemon(value.name, 2);
-      return aux;
-    });
-
-
-    const res = resGen1.concat(resGen2);
-
-
-    console.log(res.length);
-
-
-    return await Promise.all(res);
-
-  } catch (error) {
-    return Promise.reject(error);
-  }
-} 
+//     result.forEach(async (value) => {
+//       const aux: PokemonInfo | null = await useSinglePokemon(value.name, 2);
+//       if(aux){
+//         store.commit('addPokemon', value);
+//         count++;
+//         if(count===Math.ceil(result.length/10))
+//           store.commit('setFetchingPokemonList', false);
+//       }
+//     });
+// } 

@@ -1,5 +1,6 @@
 import { createStore, createLogger } from "vuex";
-import { usePokemonCompleteList, useSinglePokemon, PokemonInfo } from "@/api/pokemons";
+import { useSinglePokemon, usePokemons, PokemonInfo, Pokemon } from "@/api/pokemons";
+import { Ref, ref } from 'vue';
 
 interface FilterOptions{
   name?: string;
@@ -90,25 +91,36 @@ export default createStore({
         return Promise.reject(error);
       }
     },
-    async fetchPokemonList(){
-      try{
-        const request = await usePokemonCompleteList();
-        
-        return request;
-      } catch(error){
-        return Promise.reject(error);
+    async createPokemonList({commit}){
+
+      const addPokemonToListPerGeneration = (pokemonList: Pokemon[], generation: number, counter: Ref<number>) => {
+        console.log("Gen: ", generation, " Counter value: ", counter.value);
+        pokemonList.forEach(async (value) => {
+          const aux: PokemonInfo | null = await useSinglePokemon(value.name, generation);
+          if(aux){
+            const spriteImg = new Image();
+            spriteImg.src = aux.sprite;
+            spriteImg.onload = () => {
+              commit('addPokemon', aux);
+              counter.value++;
+              if(counter.value===Math.ceil(pokemonList.length/10))
+                commit('setFetchingPokemonList', false);
+            }
+          }
+        })
       }
-    },
-    async createPokemonList({commit, dispatch}){
+
+      commit('setFetchingPokemonList', true);
       try{
-        commit('setFetchingPokemonList', true);
-        const request: PokemonInfo[] = await dispatch('fetchPokemonList');
-        request.forEach(function(value){
-          if(value.name)
-            commit('addPokemon', value);
-            
-        });
-        commit('setFetchingPokemonList', false);
+
+        let result: Pokemon[] = await usePokemons(1);
+        const count = ref(0);
+        addPokemonToListPerGeneration(result, 1, count);
+
+        console.log("contador despues de 1 gen vale: ", count.value);
+
+        result = await usePokemons(2);
+        addPokemonToListPerGeneration(result, 2, count);
 
         return
       } catch(error){
