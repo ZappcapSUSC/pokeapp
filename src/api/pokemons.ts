@@ -54,12 +54,6 @@ export const usePokemonCompleteList = async (): Promise<PokemonInfo[]> => {
   //TODO cargar por batches los pokes para que no tarde tanto
   try {
     let result: Pokemon[] = await usePokemons(1);
-    // const res: PokemonInfo[] = [];
-
-    // await result.forEach( async (value) => {
-    //   const aux: PokemonInfo = await useSinglePokemon(value.name, 1)
-    //   res.push(aux);
-    // } )
 
     const resGen1 =  await result.map(async (value)=>{
       const aux = await useSinglePokemon(value.name, 1);
@@ -69,25 +63,13 @@ export const usePokemonCompleteList = async (): Promise<PokemonInfo[]> => {
     result = await usePokemons(2);
 
     const resGen2 =  await result.map(async (value)=>{
-      const aux = await useSinglePokemon(value.name+"a", 2);
+      //TODO Verificar por 404 en vez de nombre en especifico
+      const aux = await useSinglePokemon(value.name, 2);
       return aux;
     });
 
 
     const res = resGen1.concat(resGen2);
-
-
-
-    // await result.forEach(async (value) => {
-    //   //TODO Verificar por 404 en vez de nombre en especifico
-    //   try{
-    //     const aux: PokemonInfo = await useSinglePokemon(value.name, 2);
-    //     res.push(aux);
-    //   } catch(error){
-    //     console.log(error);
-    //   }
-
-    // });
 
 
     console.log(res.length);
