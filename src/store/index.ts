@@ -80,7 +80,7 @@ export default createStore({
     }
   },
   actions: {
-    async fetchSinglePokemon({ state, commit }, payload: string){
+    async fetchSinglePokemon({ state, commit }, payload: string): Promise<PokemonInfo | undefined> {
       try{
         commit('setFetchingSinglePokemon', true);
         const request = state.pokeList.find(element => element.name === payload);
@@ -93,8 +93,7 @@ export default createStore({
     },
     async createPokemonList({commit}){
 
-      const addPokemonToListPerGeneration = (pokemonList: Pokemon[], generation: number, counter: Ref<number>) => {
-        console.log("Gen: ", generation, " Counter value: ", counter.value);
+      const addPokemonToListPerGeneration = (pokemonList: Pokemon[], generation: number, counter: Ref<number>): void => {
         pokemonList.forEach(async (value) => {
           const aux: PokemonInfo | null = await useSinglePokemon(value.name, generation);
           if(aux){
@@ -117,8 +116,6 @@ export default createStore({
         const count = ref(0);
         addPokemonToListPerGeneration(result, 1, count);
 
-        console.log("contador despues de 1 gen vale: ", count.value);
-
         result = await usePokemons(2);
         addPokemonToListPerGeneration(result, 2, count);
 
@@ -127,7 +124,7 @@ export default createStore({
         return Promise.reject(error);
       }
     },
-    filterPokemons({commit}, payload:FilterOptions): void{
+    filterPokemons({commit}, payload:FilterOptions): void {
       const typeFilterBy = (type: string | undefined, filter: RegExp) => { return type && type.toLowerCase().search(filter) !== -1 };
       commit('setFilteredPokemonList', state.pokeList.filter((element, index, array)=>
       {
