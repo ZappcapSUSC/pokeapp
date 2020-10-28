@@ -15,7 +15,7 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
-    const toggleFalse = () => {
+    const toggleFalse = (): void => {
       store.commit("switchModalFalse");
     };
 

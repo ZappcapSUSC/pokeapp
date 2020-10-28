@@ -61,7 +61,7 @@ export default defineComponent({
     const types = computed((): string[] => {
       return storeState.pokemonTypes;
     });
-    const filterPokemonList = () => {
+    const filterPokemonList = (): void => {
       store.dispatch("filterPokemons", {
         name: pokemonName.value,
         type1: pokemonType1.value,
@@ -69,7 +69,7 @@ export default defineComponent({
         generation: pokemonGeneration.value
       });
     };
-    const clearFilter = () => {
+    const clearFilter = (): void => {
       pokemonName.value = "";
       pokemonType1.value = "";
       pokemonType2.value = "";

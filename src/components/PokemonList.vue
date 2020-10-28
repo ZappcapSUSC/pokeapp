@@ -21,6 +21,7 @@ import { useStore } from "vuex";
 import PokemonListItem from "./PokemonListItem.vue";
 import PokemonFilter from "./PokemonFilter.vue";
 import { State } from "@/store";
+import { PokemonInfo } from "@/api/pokemons";
 
 export default defineComponent({
   name: "PokemonList",
@@ -32,7 +33,7 @@ export default defineComponent({
     //TODO cargar por batches los pokes para que no tarde tanto
     const store = useStore();
     const storeState: State = store.state;
-    const pokemonStore = computed(() =>
+    const pokemonStore = computed((): PokemonInfo[] =>
       storeState.pokeListFiltered.sort((a, b) => a.id - b.id)
     );
 

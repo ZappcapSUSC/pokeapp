@@ -5,7 +5,7 @@ export interface Pokemon {
   url: string;
 }
 
-export const useApi = async function(url: RequestInfo, options?: RequestInit) {
+export const useApi = async function(url: RequestInfo, options?: RequestInit): Promise<any> {
   const res = await fetch(url, options).then(response => {
     if(response.ok){
       return response
@@ -23,7 +23,7 @@ export const useApi = async function(url: RequestInfo, options?: RequestInit) {
 export const usePokeApi = async function(
   endpoint: string,
   options?: RequestInit
-) {
+): Promise<any> {
   try {
     return await useApi(`https://pokeapi.co/api/v2/${endpoint}`, options);
   } catch (error) {

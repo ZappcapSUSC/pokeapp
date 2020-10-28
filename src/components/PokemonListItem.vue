@@ -32,7 +32,7 @@ export default defineComponent({
         return "";
       }
     });
-    const switchToggleTrue = () => {
+    const switchToggleTrue = (): void => {
       if (toggleStore.value === false) {
         store.dispatch("fetchSinglePokemon", props.name);
         store.commit("switchModalTrue");
