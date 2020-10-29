@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, onMounted } from "vue";
 import { useStore } from "vuex";
 
 export default defineComponent({
@@ -17,7 +17,12 @@ export default defineComponent({
 
     const toggleFalse = (): void => {
       store.commit("switchModalFalse");
+      store.commit("setScrimState", false);
     };
+
+    onMounted(() => {
+      store.commit("setScrimState", true);
+    });
 
     return {
       toggleFalse
@@ -36,5 +41,10 @@ export default defineComponent({
   padding: 30px 50px;
   transform: translate(-50%, -50%);
   background-color: #ebe6d8;
+  border-radius: 10px;
+
+  button {
+    float: right;
+  }
 }
 </style>

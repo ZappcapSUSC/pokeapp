@@ -13,6 +13,7 @@ interface FilterOptions{
 export type State = { 
   pokeList: PokemonInfo[]; 
   modalActive: boolean; 
+  scrimActive: boolean;
   selectedPokemon:PokemonInfo|null; 
   fetchingSinglePokemon: boolean;
   fetchingPokemonList: boolean;
@@ -24,7 +25,8 @@ export type State = {
 const state: State = { 
   pokeList: [], 
   modalActive: false, 
-  selectedPokemon:null, 
+  scrimActive: false,
+  selectedPokemon: null, 
   fetchingSinglePokemon: false, 
   fetchingPokemonList: false, 
   pokeListFiltered: [], 
@@ -63,6 +65,9 @@ export default createStore({
     switchModalFalse(state) {
       state.modalActive = false;
     },
+    setScrimState(state, payload: boolean){
+      state.scrimActive = payload;
+    },
     setSelectedPokemon(state, payload: PokemonInfo){
       state.selectedPokemon = payload;
     },
@@ -95,12 +100,12 @@ export default createStore({
 
       const addPokemonToListPerGeneration = (pokemonList: Pokemon[], generation: number, counter: Ref<number>): void => {
         pokemonList.forEach(async (value) => {
-          const aux: PokemonInfo | null = await useSinglePokemon(value.name, generation);
-          if(aux){
+          const fetchedPokemon: PokemonInfo | null = await useSinglePokemon(value.name, generation);
+          if(fetchedPokemon){
             const spriteImg = new Image();
-            spriteImg.src = aux.sprite;
+            spriteImg.src = fetchedPokemon.sprite;
             spriteImg.onload = () => {
-              commit('addPokemon', aux);
+              commit('addPokemon', fetchedPokemon);
               counter.value++;
               if(counter.value===Math.ceil(pokemonList.length/10))
                 commit('setFetchingPokemonList', false);

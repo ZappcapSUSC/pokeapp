@@ -22,6 +22,24 @@ import PokemonListItem from "./PokemonListItem.vue";
 import PokemonFilter from "./PokemonFilter.vue";
 import { State } from "@/store";
 import { PokemonInfo } from "@/api/pokemons";
+import "@/assets/Types/Bug.svg?sprite";
+import "@/assets/Types/Dark.svg?sprite";
+import "@/assets/Types/Dragon.svg?sprite";
+import "@/assets/Types/Electric.svg?sprite";
+import "@/assets/Types/Fairy.svg?sprite";
+import "@/assets/Types/Fight.svg?sprite";
+import "@/assets/Types/Fire.svg?sprite";
+import "@/assets/Types/Flying.svg?sprite";
+import "@/assets/Types/Ghost.svg?sprite";
+import "@/assets/Types/Grass.svg?sprite";
+import "@/assets/Types/Ground.svg?sprite";
+import "@/assets/Types/Ice.svg?sprite";
+import "@/assets/Types/Normal.svg?sprite";
+import "@/assets/Types/Poison.svg?sprite";
+import "@/assets/Types/Psychic.svg?sprite";
+import "@/assets/Types/Rock.svg?sprite";
+import "@/assets/Types/Steel.svg?sprite";
+import "@/assets/Types/Water.svg?sprite";
 
 export default defineComponent({
   name: "PokemonList",

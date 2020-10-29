@@ -6,6 +6,7 @@
   </template>
   <template v-else>
     <Pokemon-List></Pokemon-List>
+    <Scrim v-if="toggleScrim"></Scrim>
     <Pokemon-Modal v-if="toggleModal"></Pokemon-Modal>
   </template>
 </template>
@@ -15,15 +16,21 @@ import { defineComponent, computed } from "vue";
 import { useStore } from "vuex";
 import PokemonList from "./components/PokemonList.vue";
 import PokemonModal from "./components/PokemonModal.vue";
+import Scrim from "./components/Scrim.vue";
 
 export default defineComponent({
   name: "App",
   components: {
     PokemonList,
-    PokemonModal
+    PokemonModal,
+    Scrim
   },
   setup() {
     const store = useStore();
+    const storeState = store.state;
+    const toggleScrim = computed((): boolean => {
+      return storeState.scrimActive;
+    });
     const toggleModal = computed((): boolean => {
       return store.state.modalActive;
     });
@@ -33,7 +40,8 @@ export default defineComponent({
     store.dispatch("createPokemonList");
     return {
       toggleModal,
-      loadingList
+      loadingList,
+      toggleScrim
     };
   }
 });

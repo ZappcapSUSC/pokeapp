@@ -22,7 +22,7 @@ export interface Pokemon {
 
 export const usePokemons = async function(generation: number): Promise<Pokemon[]> {
   try {
-    const result = await usePokeApi(`generation/${generation}`);
+    const result: any = await usePokeApi(`generation/${generation}`);
     return result.pokemon_species;
   } catch (error) {
     return Promise.reject(error);
@@ -31,7 +31,7 @@ export const usePokemons = async function(generation: number): Promise<Pokemon[]
 
 export const useSinglePokemon = async function(name: string, generation: number): Promise<PokemonInfo | null> {
   try {
-    const result = await usePokeApi(`pokemon/${name}`);
+    const result: any = await usePokeApi(`pokemon/${name}`);
     return {
       id: result.id,
       name: result.name,
@@ -46,7 +46,7 @@ export const useSinglePokemon = async function(name: string, generation: number)
     };
 
   } catch (error) {
-    return Promise.reject(error).then((value): PokemonInfo => {console.log("entra"); return value}, (valuenone): null => {console.log("fail"); return null} );
+    return Promise.reject(error).then((value): PokemonInfo => {console.log("entra"); return value}, (): null => {console.log("fail"); return null} );
   }
 }
 

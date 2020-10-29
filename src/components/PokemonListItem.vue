@@ -3,9 +3,14 @@
     <span class="card-id"># {{ id }}</span>
     <img :src="sprite" alt="" />
     <span>{{ nameToUpperCase }}</span>
-    <p>
-      {{ type1 }}<span v-if="type2">, {{ type2 }}</span>
-    </p>
+    <div class="type-imgs">
+      <svg viewBox="0 0 1 1" width="50" height="50">
+        <use :xlink:href="type1SpriteId"></use>
+      </svg>
+      <svg v-if="type2" viewBox="0 0 1 1" width="50" height="50">
+        <use :xlink:href="type2SpriteId"></use>
+      </svg>
+    </div>
   </div>
 </template>
 
@@ -16,11 +21,11 @@ import { useStore } from "vuex";
 export default defineComponent({
   name: "PokemonListItem",
   props: {
-    name: String,
-    sprite: String,
-    type1: String,
+    name: { type: String, required: true },
+    sprite: { type: String, required: true },
+    type1: { type: String, required: true },
     type2: String,
-    id: Number
+    id: { type: Number, required: true }
   },
   setup(props) {
     const store = useStore();
@@ -32,6 +37,17 @@ export default defineComponent({
         return "";
       }
     });
+
+    const firstLeterToUpperCase = (value: string): string => {
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    };
+
+    const type1SpriteId = `#${firstLeterToUpperCase(props.type1)}--sprite`;
+
+    const type2SpriteId = props.type2
+      ? `#${firstLeterToUpperCase(props.type2)}--sprite`
+      : "";
+
     const switchToggleTrue = (): void => {
       if (toggleStore.value === false) {
         store.dispatch("fetchSinglePokemon", props.name);
@@ -42,7 +58,9 @@ export default defineComponent({
     return {
       toggleStore,
       switchToggleTrue,
-      nameToUpperCase
+      nameToUpperCase,
+      type1SpriteId,
+      type2SpriteId
     };
   }
 });
@@ -72,6 +90,11 @@ export default defineComponent({
     position: absolute;
     top: 10px;
     left: 10px;
+  }
+
+  .type-imgs {
+    display: flex;
+    justify-content: space-around;
   }
 }
 </style>

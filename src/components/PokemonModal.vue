@@ -8,13 +8,22 @@
         <div class="main_info">
           <img :src="activePokemon.sprite" alt="" />
           <div>
-            <span>{{ activePokemon.name }}</span>
+            <span>{{ activePokemon.name.toUpperCase() }}</span>
             <span>Base expreience: {{ activePokemon.baseExperience }}</span>
           </div>
         </div>
         <div class="types">
-          <p>{{ activePokemon.type1 }}</p>
-          <p v-if="activePokemon.type2">{{ activePokemon.type2 }}</p>
+          <svg viewBox="0 0 1 1" width="50" height="50">
+            <use :xlink:href="type1SpriteId"></use>
+          </svg>
+          <svg
+            v-if="activePokemon.type2"
+            viewBox="0 0 1 1"
+            width="50"
+            height="50"
+          >
+            <use :xlink:href="type2SpriteId"></use>
+          </svg>
         </div>
         <div class="extra_info">
           <p>Order: {{ activePokemon.order }}</p>
@@ -52,9 +61,25 @@ export default defineComponent({
       return storeState.selectedPokemon;
     });
 
+    const firstLeterToUpperCase = (value: string): string => {
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    };
+
+    const type1SpriteId = activePokemon.value
+      ? `#${firstLeterToUpperCase(activePokemon.value.type1)}--sprite`
+      : "";
+
+    const type2SpriteId = activePokemon.value
+      ? activePokemon.value.type2
+        ? `#${firstLeterToUpperCase(activePokemon.value.type2)}--sprite`
+        : ""
+      : "";
+
     return {
       activePokemon,
-      fetchingPokemon
+      fetchingPokemon,
+      type1SpriteId,
+      type2SpriteId
     };
   }
 });
