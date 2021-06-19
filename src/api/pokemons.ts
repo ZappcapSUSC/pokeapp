@@ -52,7 +52,7 @@ export const useSinglePokemon = async function(name: string, generation: number)
 
 
 // export const usePokemonCompleteList = async () => {
-//     //TODO cargar por batches los pokes para que no tarde tanto
+//     //TODO cargar por batches los pokes para que no tarde tanto2
 //     let result: Pokemon[] = await usePokemons(1);
 //     const store = useStore();
 
